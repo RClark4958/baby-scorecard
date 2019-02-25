@@ -7,11 +7,11 @@ class Create extends Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection('boards');
+    this.ref = firebase.firestore().collection('times');
     this.state = {
-      title: '',
-      description: '',
-      author: ''
+      bottle: '',
+      nap: '',
+      diaper: ''
     };
   }
   onChange = (e) => {
@@ -23,17 +23,17 @@ class Create extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, author } = this.state;
+    const { bottle, nap, diaper } = this.state;
 
     this.ref.add({
-      title,
-      description,
-      author
+      bottle,
+      nap,
+      diaper
     }).then((docRef) => {
       this.setState({
-        title: '',
-        description: '',
-        author: ''
+        bottle: '',
+        nap: '',
+        diaper: ''
       });
       this.props.history.push("/")
     })
@@ -43,29 +43,29 @@ class Create extends Component {
   }
 
   render() {
-    const { title, description, author } = this.state;
+    const { bottle, nap, diaper } = this.state;
     return (
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">
-              ADD BOARD
+            <h3 class="panel-bottle">
+              Log events
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/" class="btn btn-primary">Book List</Link></h4>
+            <h4><Link to="/" class="btn btn-primary">Log History</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" class="form-control" name="title" value={title} onChange={this.onChange} placeholder="Title" />
+                <label for="bottle">bottle:</label>
+                <input type="text" class="form-control" name="bottle" value={bottle} onChange={this.onChange} placeholder="bottle" />
               </div>
               <div class="form-group">
-                <label for="description">Description:</label>
-                <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
+                <label for="nap">nap:</label>
+                <textArea class="form-control" name="nap" onChange={this.onChange} placeholder="nap" cols="80" rows="3">{nap}</textArea>
               </div>
               <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" name="author" value={author} onChange={this.onChange} placeholder="Author" />
+                <label for="diaper">diaper:</label>
+                <input type="text" class="form-control" name="diaper" value={diaper} onChange={this.onChange} placeholder="diaper" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>

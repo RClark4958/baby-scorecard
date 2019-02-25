@@ -8,22 +8,22 @@ class Edit extends Component {
     super(props);
     this.state = {
       key: '',
-      title: '',
-      description: '',
-      author: ''
+      bottle: '',
+      nap: '',
+      diaper: ''
     };
   }
 
   componentDidMount() {
-    const ref = firebase.firestore().collection('boards').doc(this.props.match.params.id);
+    const ref = firebase.firestore().collection('times').doc(this.props.match.params.id);
     ref.get().then((doc) => {
       if (doc.exists) {
         const board = doc.data();
         this.setState({
           key: doc.id,
-          title: board.title,
-          description: board.description,
-          author: board.author
+          bottle: board.bottle,
+          nap: board.nap,
+          diaper: board.diaper
         });
       } else {
         console.log("No such document!");
@@ -40,19 +40,19 @@ class Edit extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, author } = this.state;
+    const { bottle, nap, diaper } = this.state;
 
-    const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
+    const updateRef = firebase.firestore().collection('times').doc(this.state.key);
     updateRef.set({
-      title,
-      description,
-      author
+      bottle,
+      nap,
+      diaper
     }).then((docRef) => {
       this.setState({
         key: '',
-        title: '',
-        description: '',
-        author: ''
+        bottle: '',
+        nap: '',
+        diaper: ''
       });
       this.props.history.push("/show/"+this.props.match.params.id)
     })
@@ -66,7 +66,7 @@ class Edit extends Component {
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">
+            <h3 class="panel-bottle">
               EDIT BOARD
             </h3>
           </div>
@@ -74,16 +74,16 @@ class Edit extends Component {
             <h4><Link to={`/show/${this.state.key}`} class="btn btn-primary">Board List</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" class="form-control" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
+                <label for="bottle">bottle:</label>
+                <input type="text" class="form-control" name="bottle" value={this.state.bottle} onChange={this.onChange} placeholder="bottle" />
               </div>
               <div class="form-group">
-                <label for="description">Description:</label>
-                <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
+                <label for="nap">nap:</label>
+                <input type="text" class="form-control" name="nap" value={this.state.nap} onChange={this.onChange} placeholder="nap" />
               </div>
               <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" name="author" value={this.state.author} onChange={this.onChange} placeholder="Author" />
+                <label for="diaper">diaper:</label>
+                <input type="text" class="form-control" name="diaper" value={this.state.diaper} onChange={this.onChange} placeholder="diaper" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>
