@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "babel": "^6.23.0",
+    "hamoni-sync": "^1.1.1",
     "npm": "^6.8.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5"
+    "react-scripts": "2.1.5",
+    "react-table": "^6.9.2"
   },
   "scripts": {
     "start": "react-scripts start",

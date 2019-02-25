@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+
 var TableComponent = React.createClass({
   render: function() {
     // Data
@@ -84,3 +89,5 @@ var tableData = {
 ReactDOM.render(
   <TableComponent data = {tableData} />,
   document.getElementById('table-component'));
+
+export default TableComponent;
