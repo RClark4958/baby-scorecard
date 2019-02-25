@@ -14,7 +14,8 @@ class App extends Component {
     this.state = {
       data: [],
       lastBottle: '',
-      lastNap: ''
+      lastNap: '',
+      lastDiaper: ''
     };
   }
 
@@ -23,6 +24,8 @@ class App extends Component {
       this.setState({ lastBottle: event.target.value });
     if (event.target.name === 'lastNap')
       this.setState({ lastNap: event.target.value})
+    if (event.target.name === 'lastDiaper')
+      this.setState({ lastDiaper: event.target.value})
   };
 
   handleSubmit = event => {
@@ -59,23 +62,32 @@ class App extends Component {
           <form onSubmit={this.handleSubmit}>
             <h3>Add new record</h3>
             <label>
-              FirstName:
+              Last Bottle:
               <input
                 type="text"
-                name="firstName"
-                value={this.state.firstName}
+                name="lastBottle"
+                value={this.state.lastBottle}
                 onChange={this.handleChange}
               />
             </label>{" "}
             <label>
-              LastName:
+              Last Nap:
               <input
                 type="text"
-                name="lastName"
-                value={this.state.lastName}
+                name="lastNap"
+                value={this.state.lastNap}
                 onChange={this.handleChange}
               />
-            </label> 
+            </label>{" "} 
+            <label>
+              Last Diaper:
+              <input
+                type="text"
+                name="lastDiaper"
+                value={this.state.lastDiaper}
+                onChange={this.handleChange}
+              />
+            </label>
             <input type="submit" value="Add" />
           </form>
         </p>
@@ -84,25 +96,19 @@ class App extends Component {
             data={data}
             columns={[
               {
-                Header: "First Name",
-                accessor: "firstName",
+                Header: "Time of Last Bottle",
+                accessor: "lastBottle",
                 Cell: this.renderEditable
               },
               {
-                Header: "Last Name",
-                accessor: "lastName",
+                Header: "Time of Last Nap",
+                accessor: "lastNap",
                 Cell: this.renderEditable
               },
               {
-                Header: "Full Name",
-                id: "full",
-                accessor: d => (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: d.firstName + " " + d.lastName
-                    }}
-                  />
-                )
+                Header: 'Time of Last Diaper',
+                accessor: 'lastDiaper',
+                Cell: this.renderEditable
               }
             ]}
             defaultPageSize={10}
