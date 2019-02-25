@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import firebase from "firebase/app";
 
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
-import Hamoni from 'hamoni-sync';
+
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBf9bARdmnzSAH20NnxmOe6wfEJjxfRSaI",
+    authDomain: "spaceghost-coast-to-coast.firebaseapp.com",
+    databaseURL: "https://spaceghost-coast-to-coast.firebaseio.com",
+    projectId: "spaceghost-coast-to-coast",
+    storageBucket: "spaceghost-coast-to-coast.appspot.com",
+    messagingSenderId: "782988371532"
+  };
+  firebase.initializeApp(config);
+
 
 
 class App extends Component {
@@ -19,6 +32,28 @@ class App extends Component {
     };
   }
 
+  
+
+  componentDidMount() {
+    const database = firebase.database().ref('BabyScorecard');
+    database.on('value', snapshot => {
+      const data = [];
+
+      snapshot.forEach(childSnapshot => {
+        const times = {
+          lastBottle: childSnapshot.val().lastBottle,
+          lastNap: childSnapshot.val().lastNap,
+          lastDiaper: childSnapshot.val().lastDiaper
+        };
+        data.push(times)
+      });
+
+      this.setState(prevState => {
+        return { data: [...prevState.data, ...data]};
+      });
+    });
+  }
+
   handleChange = event => {
     if (event.target.name === 'lastBottle')
       this.setState({ lastBottle: event.target.value });
@@ -29,7 +64,13 @@ class App extends Component {
   };
 
   handleSubmit = event => {
-    event.preventDefault();
+    this.listPrimitive.push({
+      lastBottle: this.state.lastBottle,
+      lastNap: this.state.lastNap,
+      lastDiaper: this.state.lastDiaper
+  });
+  this.setState({ lastBottle: "", lastNap: "", lastDiaper: "" });
+  event.preventDefault();
   };
 
   renderEditable = cellInfo => {
@@ -39,9 +80,9 @@ class App extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          const data = [...this.state.data];
-          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          this.setState({ data });
+          let row = this.state.data[cellInfo.index];
+          row[cellInfo.column.id] = e.target.innerHTML;
+          this.listPrimitive.update(cellInfo.index, row);
         }}
         dangerouslySetInnerHTML={{
           __html: this.state.data[cellInfo.index][cellInfo.column.id]
@@ -118,7 +159,11 @@ class App extends Component {
       </div>
     );
   }
+
+  
+  
 }
+
 export default App;
 
 
