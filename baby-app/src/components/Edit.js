@@ -10,7 +10,8 @@ class Edit extends Component {
       key: '',
       bottle: '',
       nap: '',
-      diaper: ''
+      diaper: '',
+      notes: ''
     };
   }
 
@@ -23,7 +24,8 @@ class Edit extends Component {
           key: doc.id,
           bottle: board.bottle,
           nap: board.nap,
-          diaper: board.diaper
+          diaper: board.diaper,
+          notes: board.notes
         });
       } else {
         console.log("No such document!");
@@ -40,7 +42,7 @@ class Edit extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { bottle, nap, diaper } = this.state;
+    const { bottle, nap, diaper, notes } = this.state;
 
     const updateRef = firebase.firestore().collection('times').doc(this.state.key);
     updateRef.set({
@@ -52,7 +54,8 @@ class Edit extends Component {
         key: '',
         bottle: '',
         nap: '',
-        diaper: ''
+        diaper: '',
+        notes: ''
       });
       this.props.history.push("/show/"+this.props.match.params.id)
     })
@@ -67,23 +70,27 @@ class Edit extends Component {
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-bottle">
-              EDIT BOARD
+              EDIT LOG
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to={`/show/${this.state.key}`} class="btn btn-primary">Board List</Link></h4>
+            <h4><Link to={`/show/${this.state.key}`} class="btn btn-primary">Baby Log</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
                 <label for="bottle">bottle:</label>
-                <input type="text" class="form-control" name="bottle" value={this.state.bottle} onChange={this.onChange} placeholder="bottle" />
+                <input type="text" class="form-control" name="bottle" value={this.state.bottle} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">
                 <label for="nap">nap:</label>
-                <input type="text" class="form-control" name="nap" value={this.state.nap} onChange={this.onChange} placeholder="nap" />
+                <input type="text" class="form-control" name="nap" value={this.state.nap} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">
                 <label for="diaper">diaper:</label>
-                <input type="text" class="form-control" name="diaper" value={this.state.diaper} onChange={this.onChange} placeholder="diaper" />
+                <input type="text" class="form-control" name="diaper" value={this.state.diaper} onChange={this.onChange} placeholder="" />
+              </div>
+              <div class="form-group">
+                <label for="notes">notes:</label>
+                <input type="text" class="form-control" name="notes" value={this.state.notes} onChange={this.onChange} placeholder="" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>

@@ -41,7 +41,7 @@ class Show extends Component {
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
-          <h4><Link to="/">Baby Log</Link></h4>
+          <h4><Link to="/">Baby Scorecard</Link></h4>
             <h3 class="panel-bottle">
               {this.state.board.bottle}
             </h3>
@@ -52,6 +52,8 @@ class Show extends Component {
               <dd>{this.state.board.nap}</dd>
               <dt>diaper:</dt>
               <dd>{this.state.board.diaper}</dd>
+              <dt>notes:</dt>
+              <dd>{this.state.board.notes}</dd>
             </dl>
             <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
             <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>

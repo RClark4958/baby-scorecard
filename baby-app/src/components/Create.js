@@ -11,7 +11,8 @@ class Create extends Component {
     this.state = {
       bottle: '',
       nap: '',
-      diaper: ''
+      diaper: '',
+      notes: ''
     };
   }
   onChange = (e) => {
@@ -23,17 +24,19 @@ class Create extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { bottle, nap, diaper } = this.state;
+    const { bottle, nap, diaper, notes } = this.state;
 
     this.ref.add({
       bottle,
       nap,
-      diaper
+      diaper,
+      notes
     }).then((docRef) => {
       this.setState({
         bottle: '',
         nap: '',
-        diaper: ''
+        diaper: '',
+        notes: ''
       });
       this.props.history.push("/")
     })
@@ -43,29 +46,33 @@ class Create extends Component {
   }
 
   render() {
-    const { bottle, nap, diaper } = this.state;
+    const { bottle, nap, diaper, notes } = this.state;
     return (
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-bottle">
-              Log events
+              Log new event
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/" class="btn btn-primary">Log History</Link></h4>
+            <h4><Link to="/" class="btn btn-primary">Baby Scorecard</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
                 <label for="bottle">bottle:</label>
-                <input type="text" class="form-control" name="bottle" value={bottle} onChange={this.onChange} placeholder="bottle" />
+                <input type="text" class="form-control" name="bottle" value={bottle} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">
                 <label for="nap">nap:</label>
-                <textArea class="form-control" name="nap" onChange={this.onChange} placeholder="nap" cols="80" rows="3">{nap}</textArea>
+                <input type="text" class="form-control" name="nap" value={nap} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">
                 <label for="diaper">diaper:</label>
-                <input type="text" class="form-control" name="diaper" value={diaper} onChange={this.onChange} placeholder="diaper" />
+                <input type="text" class="form-control" name="diaper" value={diaper} onChange={this.onChange} placeholder="" />
+              </div>
+              <div class="form-group">
+                <label for="notes">notes:</label>
+                <textArea class="form-control" name="notes" onChange={this.onChange} placeholder="" cols="80" rows="3">{notes}</textArea>
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>

@@ -16,13 +16,14 @@ class App extends Component {
   onCollectionUpdate = (querySnapshot) => {
     const times = [];
     querySnapshot.forEach((doc) => {
-      const { nap, bottle, diaper } = doc.data();
+      const { bottle, nap,  diaper, notes } = doc.data();
       times.push({
         key: doc.id,
         doc, // DocumentSnapshot
-        nap,
         bottle,
+        nap,
         diaper,
+        notes
       });
     });
     this.setState({
@@ -39,26 +40,30 @@ class App extends Component {
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-nap">
+            <h3 class="panel-bottle">
               Baby Scorecard
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/create">log new event</Link></h4>
+            <h6><Link to="/create">add to log</Link></h6>
             <table class="table table-stripe">
               <thead>
                 <tr>
-                  <th>Time of Last Bottle</th>
-                  <th>Time of Last Nap</th>
-                  <th>Time of Last Diaper</th>
+                  <th>Entry</th>
+                  <th>Last Bottle</th>
+                  <th>Last Nap</th>
+                  <th>Last Diaper</th>
+                  <th>Notes</th>
                 </tr>
               </thead>
               <tbody>
                 {this.state.times.map(board =>
                   <tr>
-                    <td><Link to={`/show/${board.key}`}>{board.nap}</Link></td>
+                    <td><Link to={`/show/${board.key}`}>Edit</Link></td>
                     <td>{board.bottle}</td>
+                    <td>{board.nap}</td>
                     <td>{board.diaper}</td>
+                    <td>{board.notes}</td>
                   </tr>
                 )}
               </tbody>
