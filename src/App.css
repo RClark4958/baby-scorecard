@@ -2,6 +2,8 @@
   text-align: center;
 }
 
+
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 10vmin;
@@ -32,7 +34,12 @@
   }
 }
 
+body {
+  background-color:  lightslategray;
+}
+
 .infoContainer {
   padding-left: 15px;
   padding-bottom: 40px;
+  
 }
