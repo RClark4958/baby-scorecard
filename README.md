@@ -7,3 +7,7 @@ Database management is done with google firebase.
 The app has the ability to add, edit, and delete.
 
 It was built in React.
+
+## Contributor
+
+This app is built and maintained by RClark4958.
