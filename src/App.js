@@ -50,9 +50,9 @@ class App extends Component {
               <thead>
                 <tr>
                   <th>Entry</th>
-                  <th>Last Bottle</th>
-                  <th>Last Nap</th>
-                  <th>Last Diaper</th>
+                  <th>Bottle</th>
+                  <th>Awake</th>
+                  <th>Diaper</th>
                   <th>Notes</th>
                 </tr>
               </thead>

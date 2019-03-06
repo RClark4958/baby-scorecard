@@ -81,7 +81,7 @@ class Edit extends Component {
                 <input type="text" class="form-control" name="bottle" value={this.state.bottle} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">
-                <label for="nap">nap:</label>
+                <label for="nap">awake:</label>
                 <input type="text" class="form-control" name="nap" value={this.state.nap} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">

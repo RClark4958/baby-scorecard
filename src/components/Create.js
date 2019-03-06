@@ -63,7 +63,7 @@ class Create extends Component {
                 <input type="text" class="form-control" name="bottle" value={bottle} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">
-                <label for="nap">nap:</label>
+                <label for="nap">awake:</label>
                 <input type="text" class="form-control" name="nap" value={nap} onChange={this.onChange} placeholder="" />
               </div>
               <div class="form-group">

@@ -41,14 +41,14 @@ class Show extends Component {
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
-          <h4><Link to="/">Baby Scorecard</Link></h4>
-            <h3 class="panel-bottle">
-              {this.state.board.bottle}
-            </h3>
+          <h4><Link to="/">Back to Baby Scorecard</Link></h4>
+
           </div>
           <div class="panel-body">
             <dl>
-              <dt>nap:</dt>
+              <dt>bottle:</dt>
+              <dd>{this.state.board.bottle}</dd>
+              <dt>awake:</dt>
               <dd>{this.state.board.nap}</dd>
               <dt>diaper:</dt>
               <dd>{this.state.board.diaper}</dd>
