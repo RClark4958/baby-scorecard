@@ -45,7 +45,7 @@ class App extends Component {
             </h3>
           </div>
           <div class="panel-body">
-            <h6><Link to="/create">add to log</Link></h6>
+            <h6><Link to="/create">add new entry</Link></h6>
             <table class="table table-stripe">
               <thead>
                 <tr>
