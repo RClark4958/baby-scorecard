@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from '../Firebase';
 import { Link } from 'react-router-dom';
+import './Create.css';
 
 class Create extends Component {
 
@@ -52,11 +53,11 @@ class Create extends Component {
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-bottle">
-              Log new event
+              Add New Entry
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/" class="btn btn-primary">Baby Scorecard</Link></h4>
+            <h4><Link to="/" class="btn btn-primary">Back to Scorecard</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
                 <label for="bottle">bottle:</label>
