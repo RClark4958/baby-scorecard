@@ -38,6 +38,10 @@ body {
   background-color: lightgrey
 }
 
+h6 {
+  text-align: right;
+}
+
 .infoContainer {
   padding-left: 15px;
   padding-bottom: 40px;
