@@ -1,78 +1,58 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
-import firebase from './Firebase';
+import { db } from './Firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.ref = firebase.firestore().collection('times');
-    this.unsubscribe = null;
-    this.state = {
-      times: []
-    };
-  }
+function App() {
+  const [times, setTimes] = useState([]);
 
-  onCollectionUpdate = (querySnapshot) => {
-    const times = [];
-    querySnapshot.forEach((doc) => {
-      const { bottle, nap,  diaper, notes } = doc.data();
-      times.push({
-        key: doc.id,
-        doc, // DocumentSnapshot
-        bottle,
-        nap,
-        diaper,
-        notes
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'times'), (querySnapshot) => {
+      const timesData = [];
+      querySnapshot.forEach((doc) => {
+        const { bottle, nap, diaper, notes } = doc.data();
+        timesData.push({ key: doc.id, bottle, nap, diaper, notes });
       });
+      setTimes(timesData);
     });
-    this.setState({
-      times
-   });
-  }
+    return () => unsubscribe();
+  }, []);
 
-  componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-  }
-
-  render() {
-    return (
-      <div class="container">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-bottle">
-              Baby Scorecard
-            </h3>
-          </div>
-          <div class="panel-body">
-            <h6><Link to="/create">add new entry</Link></h6>
-            <table class="table table-stripe">
-              <thead>
-                <tr>
-                  <th>Entry</th>
-                  <th>Bottle</th>
-                  <th>Awake</th>
-                  <th>Diaper</th>
-                  <th>Notes</th>
+  return (
+    <div className="container">
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3 className="panel-bottle">Baby Scorecard</h3>
+        </div>
+        <div className="panel-body">
+          <h6><Link to="/create">add new entry</Link></h6>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Entry</th>
+                <th>Bottle</th>
+                <th>Awake</th>
+                <th>Diaper</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {times.map(board =>
+                <tr key={board.key}>
+                  <td><Link to={`/show/${board.key}`}>Edit</Link></td>
+                  <td>{board.bottle}</td>
+                  <td>{board.nap}</td>
+                  <td>{board.diaper}</td>
+                  <td>{board.notes}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {this.state.times.map(board =>
-                  <tr>
-                    <td><Link to={`/show/${board.key}`}>Edit</Link></td>
-                    <td>{board.bottle}</td>
-                    <td>{board.nap}</td>
-                    <td>{board.diaper}</td>
-                    <td>{board.notes}</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default App;
