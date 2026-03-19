@@ -1,87 +1,58 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import firebase from '../Firebase';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { db } from '../Firebase';
+import { collection, addDoc } from 'firebase/firestore';
 import './Create.css';
 
-class Create extends Component {
+function Create() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ bottle: '', nap: '', diaper: '', notes: '' });
 
-  constructor() {
-    super();
-    this.ref = firebase.firestore().collection('times');
-    this.state = {
-      bottle: '',
-      nap: '',
-      diaper: '',
-      notes: ''
-    };
-  }
-  onChange = (e) => {
-    const state = this.state
-    state[e.target.name] = e.target.value;
-    this.setState(state);
-  }
+  const onChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-
-    const { bottle, nap, diaper, notes } = this.state;
-
-    this.ref.add({
-      bottle,
-      nap,
-      diaper,
-      notes
-    }).then((docRef) => {
-      this.setState({
-        bottle: '',
-        nap: '',
-        diaper: '',
-        notes: ''
-      });
-      this.props.history.push("/")
-    })
-    .catch((error) => {
+    try {
+      await addDoc(collection(db, 'times'), form);
+      navigate('/');
+    } catch (error) {
       console.error("Error adding document: ", error);
-    });
-  }
+    }
+  };
 
-  render() {
-    const { bottle, nap, diaper, notes } = this.state;
-    return (
-      <div class="container">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-bottle">
-              Add New Entry
-            </h3>
-          </div>
-          <div class="panel-body">
-            <h4><Link to="/" class="btn btn-primary">Back to Scorecard</Link></h4>
-            <form onSubmit={this.onSubmit}>
-              <div class="form-group">
-                <label for="bottle">bottle:</label>
-                <input type="time" class="form-control" name="bottle" value={bottle} onChange={this.onChange} placeholder="" />
-              </div>
-              <div class="form-group">
-                <label for="nap">awake:</label>
-                <input type="time" class="form-control" name="nap" value={nap} onChange={this.onChange} placeholder="" />
-              </div>
-              <div class="form-group">
-                <label for="diaper">diaper:</label>
-                <input type="time" class="form-control" name="diaper" value={diaper} onChange={this.onChange} placeholder="" />
-              </div>
-              <div class="form-group">
-                <label for="notes">notes:</label>
-                <textArea class="form-control" name="notes" onChange={this.onChange} placeholder="" cols="80" rows="3">{notes}</textArea>
-              </div>
-              <button type="submit" class="btn btn-success">Submit</button>
-            </form>
-          </div>
+  return (
+    <div className="container">
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3 className="panel-bottle">Add New Entry</h3>
+        </div>
+        <div className="panel-body">
+          <h4><Link to="/" className="btn btn-primary">Back to Scorecard</Link></h4>
+          <form onSubmit={onSubmit}>
+            <div className="mb-3">
+              <label htmlFor="bottle">bottle:</label>
+              <input type="time" className="form-control" id="bottle" name="bottle" value={form.bottle} onChange={onChange} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="nap">awake:</label>
+              <input type="time" className="form-control" id="nap" name="nap" value={form.nap} onChange={onChange} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="diaper">diaper:</label>
+              <input type="time" className="form-control" id="diaper" name="diaper" value={form.diaper} onChange={onChange} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="notes">notes:</label>
+              <textarea className="form-control" id="notes" name="notes" value={form.notes} onChange={onChange} cols="80" rows="3" />
+            </div>
+            <button type="submit" className="btn btn-success">Submit</button>
+          </form>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default Create;

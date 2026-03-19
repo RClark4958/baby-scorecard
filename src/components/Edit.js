@@ -1,104 +1,74 @@
-import React, { Component } from 'react';
-import firebase from '../Firebase';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { db } from '../Firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
-class Edit extends Component {
+function Edit() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ bottle: '', nap: '', diaper: '', notes: '' });
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      key: '',
-      bottle: '',
-      nap: '',
-      diaper: '',
-      notes: ''
-    };
-  }
-
-  componentDidMount() {
-    const ref = firebase.firestore().collection('times').doc(this.props.match.params.id);
-    ref.get().then((doc) => {
-      if (doc.exists) {
-        const board = doc.data();
-        this.setState({
-          key: doc.id,
-          bottle: board.bottle,
-          nap: board.nap,
-          diaper: board.diaper,
-          notes: board.notes
+  useEffect(() => {
+    getDoc(doc(db, 'times', id)).then((docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setForm({
+          bottle: data.bottle || '',
+          nap: data.nap || '',
+          diaper: data.diaper || '',
+          notes: data.notes || ''
         });
       } else {
         console.log("No such document!");
       }
     });
-  }
+  }, [id]);
 
-  onChange = (e) => {
-    const state = this.state
-    state[e.target.name] = e.target.value;
-    this.setState({board:state});
-  }
+  const onChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    try {
+      await updateDoc(doc(db, 'times', id), form);
+      navigate(`/show/${id}`);
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
 
-    const { bottle, nap, diaper, notes } = this.state;
-
-    const updateRef = firebase.firestore().collection('times').doc(this.state.key);
-    updateRef.set({
-      bottle,
-      nap,
-      diaper
-    }).then((docRef) => {
-      this.setState({
-        key: '',
-        bottle: '',
-        nap: '',
-        diaper: '',
-        notes: ''
-      });
-      this.props.history.push("/show/"+this.props.match.params.id)
-    })
-    .catch((error) => {
-      console.error("Error adding document: ", error);
-    });
-  }
-
-  render() {
-    return (
-      <div class="container">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-bottle">
-              EDIT LOG
-            </h3>
-          </div>
-          <div class="panel-body">
-            <h4><Link to={`/show/${this.state.key}`} class="btn btn-primary">Baby Log</Link></h4>
-            <form onSubmit={this.onSubmit}>
-              <div class="form-group">
-                <label for="bottle">bottle:</label>
-                <input type="text" class="form-control" name="bottle" value={this.state.bottle} onChange={this.onChange} placeholder="" />
-              </div>
-              <div class="form-group">
-                <label for="nap">awake:</label>
-                <input type="text" class="form-control" name="nap" value={this.state.nap} onChange={this.onChange} placeholder="" />
-              </div>
-              <div class="form-group">
-                <label for="diaper">diaper:</label>
-                <input type="text" class="form-control" name="diaper" value={this.state.diaper} onChange={this.onChange} placeholder="" />
-              </div>
-              <div class="form-group">
-                <label for="notes">notes:</label>
-                <input type="text" class="form-control" name="notes" value={this.state.notes} onChange={this.onChange} placeholder="" />
-              </div>
-              <button type="submit" class="btn btn-success">Submit</button>
-            </form>
-          </div>
+  return (
+    <div className="container">
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3 className="panel-bottle">EDIT LOG</h3>
+        </div>
+        <div className="panel-body">
+          <h4><Link to={`/show/${id}`} className="btn btn-primary">Baby Log</Link></h4>
+          <form onSubmit={onSubmit}>
+            <div className="mb-3">
+              <label htmlFor="bottle">bottle:</label>
+              <input type="text" className="form-control" id="bottle" name="bottle" value={form.bottle} onChange={onChange} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="nap">awake:</label>
+              <input type="text" className="form-control" id="nap" name="nap" value={form.nap} onChange={onChange} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="diaper">diaper:</label>
+              <input type="text" className="form-control" id="diaper" name="diaper" value={form.diaper} onChange={onChange} />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="notes">notes:</label>
+              <input type="text" className="form-control" id="notes" name="notes" value={form.notes} onChange={onChange} />
+            </div>
+            <button type="submit" className="btn btn-success">Submit</button>
+          </form>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default Edit;
